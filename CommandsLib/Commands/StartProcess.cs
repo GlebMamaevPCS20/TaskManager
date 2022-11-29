@@ -9,8 +9,11 @@ namespace TaskManagerCommandsLib.Commands
 {
     public class StartProcess : ICommands
     {
-        public string[] _appsName = new string[2];
-        private string[] _appsPath = new string[2];
+        private string _stringAppsName = "";
+        private string _stringAppsPath = "";
+        private string[] _appsName = new string[5];
+        private string[] _appsPath = new string[5];
+
         private string[] _str = new string[10];
         public string CommandInfo()
         {
@@ -41,26 +44,29 @@ namespace TaskManagerCommandsLib.Commands
             {
                 using (StreamWriter sw = File.CreateText("APPS.txt"))
                 {
-                    sw.Write("WordPad\twordpad\tPaint\tpaint");
+                    sw.Write("NotePad\tnotepad\tPaint\tmspaint");
                 }
                 StreamReader reader = new StreamReader("APPS.txt");
                 _str = reader.ReadToEnd().Split('\t');
             }
-            
-            
-            
+            string[] appsName = new string[_str.Length/2];
+            string[] appsPath = new string[_str.Length/2];
+
+
             int j = 1;
             int g = 2;
             for (int i = 1; i <= _str.Length; i++)
             {
                 if (i % 2 != 0)
                 {
+                    appsName[i - j] = _str[i - 1];
                     _appsName[i - j] = _str[i - 1];
                     j++;
                 }
 
                 else
                 {
+                    appsPath[i - g] = _str[i - 1];
                     _appsPath[i - g] = _str[i - 1];
                     g++;
                 }
@@ -68,10 +74,16 @@ namespace TaskManagerCommandsLib.Commands
 
             }
         }
+
         public string[] ReturnAppsNames()
         {
             ParseApplicationsString();
-            return _appsName;
+            
+            foreach (string aN in _appsName)
+                _stringAppsName += aN + "\t";
+            string[] appsName = _stringAppsName.Split('\t');
+
+            return appsName;
         }
         
 
@@ -82,19 +94,26 @@ namespace TaskManagerCommandsLib.Commands
             try
             {
 
+                foreach (string aN in _appsName)
+                    _stringAppsName += aN + "\t";
+                string[] appsName = _stringAppsName.Split('\t');
 
-                for (int i = 0; i < _appsName.Length; i++)
+                foreach (string aN in _appsPath)
+                    _stringAppsPath += aN + "\t";
+                string[] appsPath = _stringAppsPath.Split('\t');
+
+                for (int i = 0; i < appsName.Length; i++)
                 {
-                    if (_appsName[i] == args[1])
+                    if (appsName[i] == args[1])
                     {
-                        Process.Start(_appsPath[i]);
-                        successful = "Приложение " + _appsName[i] + " запущено";
+                        Process.Start(appsPath[i]);
+                        successful = "Приложение " + appsName[i] + " запущено";
                         break;
                     }
                     else
                     {
                         successful = "Приложение " + args[1] + " не найдено, список доступных приложений: \n";
-                        foreach (string name in _appsName)
+                        foreach (string name in appsName)
                             successful += name + "\n";
                     }
 
