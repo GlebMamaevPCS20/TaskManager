@@ -25,7 +25,7 @@ public partial class Form1 : Form
         string[] pName = manager.ExecuteCommand("GPNAME").Split('\\');
         dataGridView1.Rows.Clear();
         dataGridView1.Rows.Add(pid.Length);
-        for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
+        for (int i = 0; i < dataGridView1.Rows.Count-1; i++)
         {
             dataGridView1[0, i].Value = pid[i];
             dataGridView1[1, i].Value = pName[i];
