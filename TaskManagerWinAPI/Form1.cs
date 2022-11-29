@@ -2,7 +2,7 @@ using TaskManagerCommandsLib;
 using System.Diagnostics;
 using System.ComponentModel.Design;
 using TaskManagerCommandsLib.Commands;
-
+using System.Security.Cryptography;
 
 namespace TaskManagerWinAPI;
 
@@ -21,11 +21,13 @@ public partial class Form1 : Form
     }
     private void LoadTable()
     {
+        string[] str = new string[1];
         string[] pid = manager.ExecuteCommand("GPID").Split(' ');
+        
         string[] pName = manager.ExecuteCommand("GPNAME").Split('\\');
         dataGridView1.Rows.Clear();
         dataGridView1.Rows.Add(pid.Length);
-        for (int i = 0; i < dataGridView1.Rows.Count-1; i++)
+        for (int i = 0; i < dataGridView1.Rows.Count-2; i++)
         {
             dataGridView1[0, i].Value = pid[i];
             dataGridView1[1, i].Value = pName[i];
@@ -60,5 +62,6 @@ public partial class Form1 : Form
     private void button4_Click(object sender, EventArgs e)
     {
         manager.ExecuteCommand("SP "+ ListBox_1.SelectedItem.ToString());
+        LoadTable();
     }
 }
